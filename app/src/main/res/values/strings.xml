@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Shardik</string>
+    <string name="start_blocking">Start blocking</string>
 </resources>
