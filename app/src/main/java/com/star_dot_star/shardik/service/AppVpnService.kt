@@ -4,7 +4,9 @@ import android.app.Service
 import android.content.Intent
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
+import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.star_dot_star.shardik.MainActivity
 import org.pcap4j.packet.DnsPacket
 import org.pcap4j.packet.IpV4Packet
 import org.pcap4j.packet.UdpPacket
@@ -25,6 +27,8 @@ class AppVpnService : VpnService() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.i(TAG, "service onStartCommand")
+        val notificationBuilder = NotificationCompat.Builder(this, MainActivity.NOTIFICATION_CHANNEL)
+        startForeground(1234, notificationBuilder.build())
 
         vpnInterface = Builder()
             .addAddress("192.168.50.1", 24)
