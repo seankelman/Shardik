@@ -22,11 +22,13 @@ class AppVpnService : VpnService() {
     private var thread: Thread? = null
     private val dnsServer = InetAddress.getByName("8.8.8.8")
     private var vpnInterface: ParcelFileDescriptor? = null
-    // TODO: just for testing, replace with 'real' list of ad host names
-    private val blacklistedHosts = mutableSetOf("www.reddit.com", "reddit.com", "yahoo.com")
+    private lateinit var blacklistedHosts: HostBlacklist
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.i(TAG, "service onStartCommand")
+
+        blacklistedHosts = HostBlacklist(this)
+
         val notificationBuilder = NotificationCompat.Builder(this, MainActivity.NOTIFICATION_CHANNEL)
         startForeground(1234, notificationBuilder.build())
 
@@ -94,7 +96,7 @@ class AppVpnService : VpnService() {
             }
 
             // Check hostname vs list of blacklisted hosts:
-            val response: ByteArray = if (blacklistedHosts.contains(dnsHostName)) {
+            val response: ByteArray = if (blacklistedHosts.isHostBlackListed(dnsHostName)) {
                 Log.i(TAG, "found host $dnsHostName :: blocking")
                 dnsPacket.rawData
             } else {
