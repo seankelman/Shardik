@@ -38,6 +38,10 @@ class HostBlacklist(context: Context) {
             return emptyList()
         }
 
+        // TODO: adding an arbitrary domain, this is just for testing
+        outList.add("www.reddit.com")
+        outList.add("reddit.com")
+
         return outList.toList()
     }
 }
